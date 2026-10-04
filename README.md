@@ -40,7 +40,7 @@ frontend/
 │   ├── register.js     Logika halaman registrasi
 │   ├── login.js        Logika halaman login
 │   └── home.js         Logika halaman beranda setelah login
-└── assets/img/         Gambar ilustrasi (ganti sesuai kebutuhan)
+└── assets/img/         Gambar ilustrasi tiap halaman
 ```
 
 Setiap halaman memuat CSS bersama (`base.css`, `modal.css`, `auth.css`) ditambah CSS miliknya sendiri.
@@ -60,15 +60,15 @@ Langkah-langkah di dalam register dan login **bukan halaman terpisah**. Itu bebe
 
 ## 4. Data dummy yang sedang dipakai
 
-| Hal | Perilaku sekarang |
-|---|---|
-| Kode verifikasi email | Selalu **123456** |
-| Validasi form | Nama min. 3 huruf, email valid, password min. 8 karakter, ulangi password harus sama |
-| Login | Email dan password apa saja asal formatnya valid |
-| Verifikasi wajah | Hanya simulasi pemindaian 2,4 detik, tanpa kamera |
-| Hasil wajah | Berhasil. Gagal kalau URL ditambah `?face=fail` |
-| Sesi login | Disimpan di `sessionStorage` (hanya untuk demo) |
-| Profil, Pengolahan Data | Pop-up info dummy |
+| Hal                     | Perilaku sekarang                                                                    |
+| ----------------------- | ------------------------------------------------------------------------------------ |
+| Kode verifikasi email   | Selalu **123456**                                                                    |
+| Validasi form           | Nama min. 3 huruf, email valid, password min. 8 karakter, ulangi password harus sama |
+| Login                   | Email dan password apa saja asal formatnya valid                                     |
+| Verifikasi wajah        | Hanya simulasi pemindaian 2,4 detik, tanpa kamera                                    |
+| Hasil wajah             | Berhasil. Gagal kalau URL ditambah `?face=fail`                                      |
+| Sesi login              | Disimpan di `sessionStorage` (hanya untuk demo)                                      |
+| Profil, Pengolahan Data | Pop-up info dummy                                                                    |
 
 ### Cara melihat pop-up gagal
 
@@ -87,20 +87,20 @@ Semua bagian dummy sudah ditandai di JavaScript. Berikut daftar yang perlu digan
 
 ### `js/register.js`
 
-| Aksi di UI | Sekarang | Ganti dengan |
-|---|---|---|
-| Submit form data akun | Hanya validasi lalu pindah ke langkah 2 | `POST /api/register` berisi `{nama, email, password}`. Server menyimpan data sementara dan mengirim kode ke email. |
-| Tombol "Verifikasi dan buat akun" | Cek kode == `DUMMY_OTP` | `POST /api/register/verify-email` berisi `{email, code}` |
-| Tombol "Kirim ulang" | Toast dummy | `POST /api/register/resend-code` berisi `{email}` |
-| Tombol "Mulai Verifikasi" (wajah) | `App.scanFace(...)` simulasi | Ambil foto dari kamera, lalu `POST /api/register/face` berisi `{email, image}`. Server menyimpan data wajah (embedding). |
+| Aksi di UI                        | Sekarang                                | Ganti dengan                                                                                                             |
+| --------------------------------- | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| Submit form data akun             | Hanya validasi lalu pindah ke langkah 2 | `POST /api/register` berisi `{nama, email, password}`. Server menyimpan data sementara dan mengirim kode ke email.       |
+| Tombol "Verifikasi dan buat akun" | Cek kode == `DUMMY_OTP`                 | `POST /api/register/verify-email` berisi `{email, code}`                                                                 |
+| Tombol "Kirim ulang"              | Toast dummy                             | `POST /api/register/resend-code` berisi `{email}`                                                                        |
+| Tombol "Mulai Verifikasi" (wajah) | `App.scanFace(...)` simulasi            | Ambil foto dari kamera, lalu `POST /api/register/face` berisi `{email, image}`. Server menyimpan data wajah (embedding). |
 
 ### `js/login.js`
 
-| Aksi di UI | Sekarang | Ganti dengan |
-|---|---|---|
-| Submit email dan password | Hanya validasi format | `POST /api/login` berisi `{email, password}` |
-| Tombol "Mulai Verifikasi" (wajah) | Simulasi | `POST /api/login/face` berisi `{email, image}`. Server mencocokkan wajah. |
-| Tombol "Lupa Password?" | Pop-up dummy | Alur reset password |
+| Aksi di UI                        | Sekarang              | Ganti dengan                                                              |
+| --------------------------------- | --------------------- | ------------------------------------------------------------------------- |
+| Submit email dan password         | Hanya validasi format | `POST /api/login` berisi `{email, password}`                              |
+| Tombol "Mulai Verifikasi" (wajah) | Simulasi              | `POST /api/login/face` berisi `{email, image}`. Server mencocokkan wajah. |
+| Tombol "Lupa Password?"           | Pop-up dummy          | Alur reset password                                                       |
 
 ### `js/common.js`
 
@@ -118,11 +118,13 @@ Semua pop-up dipanggil lewat satu fungsi:
 
 ```js
 App.showModal({
-  type: 'success',        // 'success' | 'error' | 'info'
-  title: 'Judul',
-  message: 'Isi pesan',
-  button: 'Teks tombol',
-  onClose: () => { /* aksi setelah tombol ditekan */ }
+  type: "success", // 'success' | 'error' | 'info'
+  title: "Judul",
+  message: "Isi pesan",
+  button: "Teks tombol",
+  onClose: () => {
+    /* aksi setelah tombol ditekan */
+  },
 });
 ```
 
@@ -130,23 +132,7 @@ Jadi saat respons server datang (sukses atau gagal), cukup panggil `App.showModa
 
 ---
 
-## 6. Mengganti gambar ilustrasi
-
-Gambar ada di tag `<img class="auth__art">` (register dan login) dan `<img class="home__art">` (home). Ganti nilai `src`-nya, atau timpa file di `assets/img/` dengan nama yang sama.
-
-Ukuran gambar menyesuaikan otomatis (`object-fit: contain`), jadi tidak perlu dipotong.
-
----
-
-## 7. Mengubah warna dan ukuran
-
-- **Warna** ada di bagian atas `css/base.css` (blok `:root`), misalnya `--navy-800`, `--blue-600`, `--blue-400`, `--ok` (hijau), `--err` (merah). Ubah di sana, semua halaman ikut berubah.
-- **Ukuran font** memakai satuan `rem`, dan `rem` dihitung dari tinggi layar (lihat `html { font-size: ... }` di `base.css`). Ini yang membuat tiap halaman muat satu layar tanpa scroll di desktop.
-- Di layar sempit (di bawah 860px) tampilan berubah jadi satu kolom dan boleh di-scroll.
-
----
-
-## 8. Catatan keamanan untuk saat dihubungkan ke backend
+## 6. Catatan keamanan untuk saat dihubungkan ke backend
 
 Front end ini hanya tampilan, jadi semua pengecekan harus diulang di server:
 
@@ -160,11 +146,3 @@ Front end ini hanya tampilan, jadi semua pengecekan harus diulang di server:
 - Pesan error ke pengguna jangan terlalu detail (misalnya jangan membedakan "email tidak ada" dan "password salah").
 
 ---
-
-## 9. Daftar elemen penting (untuk dihubungkan lewat JS)
-
-**register.html**: `#form-akun`, `#nama`, `#email`, `#pass`, `#pass2`, `#otp` (6 input kode), `#btn-verif-email`, `#btn-kirim-ulang`, `#btn-ubah-data`, `#face`, `#btn-mulai-wajah`, `#btn-kembali`
-
-**login.html**: `#form-login`, `#email`, `#pass`, `#btn-lupa`, `#face`, `#btn-mulai-wajah`, `#btn-kembali`
-
-**home.html**: `#btn-profil`, `#btn-data`
